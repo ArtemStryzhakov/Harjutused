@@ -1,19 +1,18 @@
 body {
     font-family: sans-serif;
-    background-color: lightblue;
-}
-th, td {
-    border: solid black 2px;
-    padding: 0.5em;
 }
 
-th{
-    background-color: black;
+p#demo {
+    width: 70%;
+    border: 1px solid black;
+    padding: 1em;
+    border-radius: 40px;
+    background-color: rebeccapurple;
     color: white;
 }
 
-table {
-    width: 30%;
-    border-collapse: collapse;
-    background-color: white;
+#app{
+    background-color: #024b02;
+    color: white;
+    width: max-content;
 }

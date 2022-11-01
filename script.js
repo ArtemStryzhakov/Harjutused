@@ -1,34 +1,46 @@
-function loadXMLDoc() {
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            getGameDetails(this);
-        }
-    };
-    xmlhttp.open("GET", "./games.xml", true);
-    xmlhttp.send();
+let profile = "";
+let Name = "";
+let Id = "";
+let Link = "";
+let Repos = "";
+
+function RenderPage() {
+    document.getElementById("app").innerHTML = `
+<div>
+  <h1>Github profile viewer</h1>
+  <p>Please enter profile name: </p>
+  <input id="input" />
+  <div class="content">
+    <h1 id="name">Name: ${Name} </h1>
+    <p id="id">Id: ${Id} | </p>
+    <p id="repos">Public repos: ${Repos} </p>
+    <a id="profileurl"href="${Link}" target=" blank">Link: ${Name}</a>
+  </div>
+</div>
+    `;
 }
 
-function getGameDetails(xml) {
-    const xmlDoc = xml.responseXML;
-    let tableRows = "<tr><th>Title</th><th>Price</th><th>Platforms</th></tr>";
-    let gameElements = xmlDoc.getElementsByTagName("game");
-    for (let i = 0; i < gameElements.length; i++) {
-        tableRows +=
-            "<tr><td>" +
-            gameElements[i].getElementsByTagName("title")[0].childNodes[0].nodeValue +
-            "</td><td>" +
-            gameElements[i].getElementsByTagName("price")[0].childNodes[0].nodeValue +
-            "</td><td>";
-        let platforms = gameElements[i].getElementsByTagName("platform");
-        for (let j = 0; j < platforms.length; j++) {
-            tableRows += platforms[j].childNodes[0].nodeValue + "/";
-        }
-        tableRows += "</td></tr>";
-    }
-    document.getElementById("xmlTable").innerHTML = tableRows;
+let fetchProfile = async () => {
+    let fetchedData;
+
+    await fetch(`https://api.github.com/users/${profile}`)
+        .then((response) => response.json())
+        .then((data) => (fetchedData = data));
+    console.log(fetchedData);
+
+    Name = fetchedData.login;
+    Id = fetchedData.id;
+    Link = fetchedData.html_url;
+    Repos = fetchedData.public_repos;
+
+    RenderPage();
+};
+
+RenderPage();
+
+const input = document.getElementById("input");
+input.addEventListener("change", updateValue);
+async function updateValue(e) {
+    profile = e.target.value;
+    await fetchProfile();
 }
-
-document.getElementById("app").innerHTML = `<table id="xmlTable"></table>`;
-
-loadXMLDoc();
