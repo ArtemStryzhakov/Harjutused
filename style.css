@@ -1,0 +1,19 @@
+body {
+    font-family: sans-serif;
+    background-color: lightblue;
+}
+th, td {
+    border: solid black 2px;
+    padding: 0.5em;
+}
+
+th{
+    background-color: black;
+    color: white;
+}
+
+table {
+    width: 30%;
+    border-collapse: collapse;
+    background-color: white;
+}
